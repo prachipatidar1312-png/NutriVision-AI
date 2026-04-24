@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>NutriVision AI</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<h1>NutriVision AI</h1>
+
+<input type="file" id="imageInput">
+<button onclick="uploadImage()">Analyze</button>
+
+<div id="result"></div>
+
+<hr>
+
+<h2>Chatbot</h2>
+<input type="text" id="chatInput">
+<button onclick="sendMessage()">Send</button>
+
+<div id="chatBox"></div>
+
+<script>
+async function uploadImage() {
+    let fileInput = document.getElementById("imageInput");
+    let formData = new FormData();
+    formData.append("image", fileInput.files[0]);
+
+    let res = await fetch("/predict", {
+        method: "POST",
+        body: formData
+    });
+
+    let data = await res.json();
+
+    document.getElementById("result").innerHTML =
+        `Food: ${data.label} <br> Calories: ${data.nutrition.calories}`;
+}
+
+async function sendMessage() {
+    let input = document.getElementById("chatInput");
+
+    let res = await fetch("/chat", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({message: input.value})
+    });
+
+    let data = await res.json();
+
+    document.getElementById("chatBox").innerHTML +=
+        `<p><b>You:</b> ${input.value}</p>
+         <p><b>Bot:</b> ${data.response}</p>`;
+
+    input.value = "";
+}
+</script>
+
+</body>
+</html>
