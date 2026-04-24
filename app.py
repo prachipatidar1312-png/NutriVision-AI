@@ -1,10 +1,9 @@
 from flask import Flask, render_template, request, jsonify
 import os
 from PIL import Image
-
-from src.model_pipeline import FoodDetector
-from src.calorie_estimator import CalorieEstimator
-from src.chatbot import NutritionChatbot
+from model_pipeline import FoodDetector
+from calorie_estimator import CalorieEstimator
+from chatbot import NutritionChatbot
 
 app = Flask(__name__)
 UPLOAD_FOLDER = "static/uploads"
